@@ -17,7 +17,7 @@
     "pool",
     "concurrency",
     "promise",
-    "promises manager"
+    "promise manager"
   ],
   "author": "Pere Muñoz <peremunozfiguerol33@gmail.com>",
   "license": "MIT",
