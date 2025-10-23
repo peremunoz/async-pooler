@@ -28,10 +28,10 @@ export interface PoolOptions {
  * ```
  */
 export class AsyncPool {
-	private queue: Task<any>[] = [];
+	private queue: Task<unknown>[] = [];
 	private active = 0;
 	private completed = 0;
-	private results: any[] = [];
+	private results: unknown[] = [];
 
 	/**
 	 * Creates an instance of AsyncPool.
@@ -59,7 +59,7 @@ export class AsyncPool {
 	 *
 	 * @returns A promise that resolves to an array of results from the tasks.
 	 */
-	async runAll(): Promise<any[]> {
+	async runAll(): Promise<unknown[]> {
 		return new Promise((resolve) => {
 			const runNext = async () => {
 				if (this.queue.length === 0 && this.active === 0) {
@@ -67,7 +67,8 @@ export class AsyncPool {
 				}
 
 				while (this.active < this.concurrency && this.queue.length) {
-					const task = this.queue.shift()!;
+					const task = this.queue.shift();
+					if (!task) break;
 					this.runTask(task).finally(() => runNext());
 				}
 			};
