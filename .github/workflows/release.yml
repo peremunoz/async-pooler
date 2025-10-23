@@ -53,6 +53,8 @@ jobs:
       - name: 🧾 Generate changelog (new commits only)
         if: steps.check.outputs.skip == 'false'
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
           git add CHANGELOG.md
           git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
