@@ -114,6 +114,45 @@ Progress: 2/5
 [ '✅ Task 0 succeeded', '✅ Task 1 succeeded', ... ]
 ```
 
+## ⏱️ Using Timeouts with `TimedTask`
+Sometimes tasks might hang — use TimedTask to automatically fail after a delay.
+
+```ts
+import { AsyncPool, TimedTask } from 'async-pooler'
+
+const pool = new AsyncPool(2)
+
+pool.add(
+  new TimedTask(
+    'fast',
+    async () => {
+      await new Promise((r) => setTimeout(r, 100))
+      return '⚡ Fast done'
+    },
+    1000 // timeout in ms
+  )
+)
+
+pool.add(
+  new TimedTask(
+    'slow',
+    async () => {
+      await new Promise((r) => setTimeout(r, 2000))
+      return '🐢 Slow done'
+    },
+    1000
+  )
+)
+
+const results = await pool.runAll()
+console.log(results)
+```
+### Example output:
+
+```
+[ '⚡ Fast done', Error: Task "slow" timed out after 1000ms ]
+```
+
 ## 🧪 Testing
 
 ```bash
