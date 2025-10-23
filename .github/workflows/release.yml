@@ -22,6 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
+          fetch-tags: true
 
       - name: ⚙️ Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -71,7 +72,7 @@ jobs:
       - name: 🧾 Generate changelog (new commits only)
         if: steps.check.outputs.skip == 'false'
         run: |
-          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 1
+          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
           git add CHANGELOG.md
           git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
           git push origin HEAD:master
