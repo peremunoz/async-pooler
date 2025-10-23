@@ -1,4 +1,5 @@
 import { Task } from "../core/Task";
+import { TimeoutError } from "../errors/TimeoutError";
 
 /**
  * A task that fails if not completed within a timeout.
@@ -23,12 +24,7 @@ export class TimedTask<T> extends Task<T> {
 			super.run(),
 			new Promise<T>((_, reject) =>
 				setTimeout(
-					() =>
-						reject(
-							new Error(
-								`Task "${this.id}" timed out after ${this.timeoutMs}ms`,
-							),
-						),
+					() => reject(new TimeoutError(this.id, this.timeoutMs)),
 					this.timeoutMs,
 				),
 			),

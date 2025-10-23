@@ -41,7 +41,7 @@ export class AsyncPool {
 	 * @param options - Optional configuration options for retries and progress
 	 */
 	constructor(
-		private readonly concurrency: number = 0,
+		private readonly concurrency: number = -1,
 		private readonly options?: PoolOptions,
 	) {}
 
@@ -61,6 +61,12 @@ export class AsyncPool {
 	 * @returns A promise that resolves to an array of results from the tasks.
 	 */
 	async runAll(): Promise<unknown[]> {
+		if (this.concurrency <= 0) {
+			// No concurrency limit, run all tasks in parallel
+			const executions = this.queue.map((task) => this.runTask(task));
+			await Promise.all(executions);
+			return this.results;
+		}
 		return new Promise((resolve) => {
 			const runNext = async () => {
 				if (this.queue.length === 0 && this.active === 0) {
