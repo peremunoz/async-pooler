@@ -3,7 +3,7 @@ name: 🧪 Verify Build
 on:
   push:
     branches: [main, master, dev]
-  on.workflow_call:
+  workflow_call:
 
 jobs:
   verify:
