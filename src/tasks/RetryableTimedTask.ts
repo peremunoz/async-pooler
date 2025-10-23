@@ -1,30 +1,32 @@
 import type { Retryable } from "../core/Retryable";
 import type { RetryStrategy } from "../core/RetryStrategy";
-import { Task } from "../core/Task";
+import { TimedTask } from "./TimedTask";
 
 /**
- * A task that can automatically retry on failure.
+ * A task that supports both retry and timeout features.
  */
-export class RetryableTask<T> extends Task<T> implements Retryable {
+export class RetryableTimedTask<T> extends TimedTask<T> implements Retryable {
 	/**
-	 * Creates a new RetryableTask.
+	 * Creates a new RetryableTimedTask.
 	 * @param id - Unique identifier for the task.
 	 * @param executor - The task executor function.
+	 * @param timeoutMs - The timeout duration in milliseconds.
 	 * @param retryStrategy - The retry strategy to use for this task.
 	 */
 	constructor(
 		id: string,
 		executor: () => Promise<T>,
+		timeoutMs: number,
 		private readonly retryStrategy: RetryStrategy,
 	) {
-		super(id, executor);
+		super(id, executor, timeoutMs);
 	}
 
 	hasOwnRetryStrategy(): boolean {
 		return true;
 	}
 
-	getRetryStrategy(): RetryStrategy | undefined {
+	getRetryStrategy(): RetryStrategy {
 		return this.retryStrategy;
 	}
 
