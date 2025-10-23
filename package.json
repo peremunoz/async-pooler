@@ -1,34 +1,35 @@
 {
-  "name": "async-pooler",
-  "version": "1.0.0",
-  "description": "Lightweight and typed async pool manager with concurrency control and retry strategies.",
-  "module": "src/index.ts",
-  "type": "module",
-  "scripts": {
-    "dev": "bun run test --watch",
-    "test": "vitest run",
-    "lint": "biome check .",
-    "lint:fix": "biome check --apply .",
-    "build": "bun build ./src/index.ts --outdir dist --target node",
-    "docs": "typedoc --out docs src --excludePrivate --excludeProtected --includeVersion"
-  },
-  "keywords": [
-    "async",
-    "pool",
-    "concurrency",
-    "promise",
-    "promise manager"
-  ],
-  "author": "Pere Muñoz <peremunozfiguerol33@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/bun": "^1.3.0",
-    "biome": "^0.3.3",
-    "bun-types": "^1.3.1",
-    "typedoc": "^0.28.14",
-    "vitest": "^3.2.4"
-  },
-  "peerDependencies": {
-    "typescript": "^5.9.3"
-  }
+	"name": "async-pooler",
+	"version": "1.0.0",
+	"description": "Lightweight and typed async pool manager with concurrency control and retry strategies.",
+	"module": "src/index.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "bun run test --watch",
+		"test": "vitest run",
+		"lint": "biome check .",
+		"lint:fix": "biome check --apply .",
+		"build": "bun build ./src/index.ts --outdir dist --target node",
+		"docs": "typedoc --out docs src --excludePrivate --excludeProtected --includeVersion"
+	},
+	"keywords": [
+		"async",
+		"pool",
+		"concurrency",
+		"promise",
+		"promise manager"
+	],
+	"author": "Pere Muñoz <peremunozfiguerol33@gmail.com>",
+	"license": "MIT",
+	"devDependencies": {
+		"@biomejs/biome": "2.2.7",
+		"@types/bun": "^1.3.0",
+		"biome": "^0.3.3",
+		"bun-types": "^1.3.1",
+		"typedoc": "^0.28.14",
+		"vitest": "^3.2.4"
+	},
+	"peerDependencies": {
+		"typescript": "^5.9.3"
+	}
 }
