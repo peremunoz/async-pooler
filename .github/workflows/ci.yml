@@ -35,7 +35,10 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             git commit -m "🧹 Auto format & lint fixes"
-            git push
+            # The PR source branch (e.g., 'dev')
+            BRANCH="${{ github.head_ref }}"
+            echo "🔄 Pushing to origin/$BRANCH ..."
+            git push origin HEAD:$BRANCH
           else
             echo "✅ No formatting changes needed."
           fi
