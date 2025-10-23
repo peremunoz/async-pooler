@@ -1,3 +1,15 @@
+## [1.2.2](https://github.com/peremunoz/async-pooler/compare/v1.2.1...v1.2.2) (2025-10-23)
+
+### Features
+
+* create pull request for changelog update after release ([b53e32b](https://github.com/peremunoz/async-pooler/commit/b53e32b67642b097b6edebeb22ee945e33890cb9))
+* update changelog generation to include commit message ([2229614](https://github.com/peremunoz/async-pooler/commit/2229614b9a320ee84ed75e329dcaefb1c79a79e8))
+* update release workflow to include changelog PR automation ([fe02ad8](https://github.com/peremunoz/async-pooler/commit/fe02ad8925617091d4cd016388393a720cc9d4c4))
+
+### Bug Fixes
+
+* add pull-requests permission to release workflow ([42ce83f](https://github.com/peremunoz/async-pooler/commit/42ce83f284a88435079b273a60a2f0ca073aec04))
+* indentation for auto-merge step in release workflow ([44b58bf](https://github.com/peremunoz/async-pooler/commit/44b58bfbf536b17a13c2561ca2da9d69e19839aa))
 ## [1.2.0](https://github.com/peremunoz/async-pooler/compare/v1.1.2...v1.2.0) (2025-10-23)
 
 ### ✨ Features
