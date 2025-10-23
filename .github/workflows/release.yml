@@ -53,6 +53,7 @@ jobs:
 
       - name: 🧾 Generate changelog
         id: changelog
+        if: steps.check.outputs.skip == 'false'
         run: |
           bunx conventional-changelog -p conventionalcommits --release-count 1 > RELEASE_NOTES.md
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
@@ -80,6 +81,7 @@ jobs:
       
 
       - name: 🧰 Create GitHub Release
+        if: steps.check.outputs.skip == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.package.outputs.version }}
