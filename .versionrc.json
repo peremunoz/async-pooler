@@ -1,0 +1,10 @@
+{
+	"types": [
+		{ "type": "feat", "section": "✨ Features" },
+		{ "type": "fix", "section": "🐞 Fixes" },
+		{ "type": "refactor", "section": "🧹 Refactors" },
+		{ "type": "docs", "section": "📝 Docs" },
+		{ "type": "test", "section": "🧪 Tests" },
+		{ "type": "chore", "section": "🔧 Chores" }
+	]
+}

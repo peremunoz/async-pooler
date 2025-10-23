@@ -1,6 +1,6 @@
 {
 	"name": "async-pooler",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Lightweight and typed async pool manager with concurrency control and retry strategies.",
 	"module": "src/index.ts",
 	"type": "module",

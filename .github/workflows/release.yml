@@ -50,6 +50,14 @@ jobs:
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: 🧾 Generate changelog (new commits only)
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+          git add CHANGELOG.md
+          git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
+          git push origin HEAD:master
+          
       - name: 🏷️ Create Git tag
         if: steps.check.outputs.skip == 'false'
         run: |
@@ -69,13 +77,6 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           npm publish --access public
       
-      - name: 🧾 Generate changelog (new commits only)
-        if: steps.check.outputs.skip == 'false'
-        run: |
-          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
-          git add CHANGELOG.md
-          git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
-          git push origin HEAD:master
 
       - name: 🧰 Create GitHub Release
         if: steps.check.outputs.skip == 'false'
