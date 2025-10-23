@@ -67,6 +67,14 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           npm publish --access public
+      
+      - name: 🧾 Generate changelog
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+          git add CHANGELOG.md
+          git commit -m "📝 update CHANGELOG for version v${{ steps.package.outputs.version }}" || echo "No changes to commit"
+          git push origin HEAD:master
 
       - name: 🧰 Create GitHub Release
         if: steps.check.outputs.skip == 'false'
@@ -74,12 +82,4 @@ jobs:
         with:
           tag_name: v${{ steps.package.outputs.version }}
           name: "v${{ steps.package.outputs.version }}"
-          body: |
-            🚀 **async-pooler v${{ steps.package.outputs.version }}** is now live!
-
-            ### Highlights
-            - Automatically published via CI
-            - Linted, tested and built with Bun
-
-            ---
-            [View on npm](https://www.npmjs.com/package/async-pooler)
+          body_path: CHANGELOG.md
