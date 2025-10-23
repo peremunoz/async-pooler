@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { RetryableTask } from "../src/tasks/RetryableTask";
+import { describe, expect, it, vi } from "vitest";
 import { ExponentialBackoffStrategy } from "../src/strategies/ExponentialBackoffStrategy";
+import { RetryableTask } from "../src/tasks/RetryableTask";
 
 describe("RetryableTask", () => {
 	it("should retry and eventually succeed", async () => {
