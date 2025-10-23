@@ -35,8 +35,17 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             git commit -m "🧹 Auto format & lint fixes"
+
+            # Identify the PR source branch (e.g. 'dev')
             BRANCH="${{ github.head_ref }}"
-            git push origin HEAD:$BRANCH || echo "⚠️ Could not push (likely forked PR)"
+            echo "🔄 Checking out and pushing back to: $BRANCH"
+
+
+            # Switch to the real branch and push
+            git fetch origin $BRANCH
+            git checkout $BRANCH
+            git pull origin $BRANCH
+            git push origin $BRANCH || echo "⚠️ Could not push (permissions or forked PR)"
           else
             echo "✅ No formatting changes needed."
           fi
