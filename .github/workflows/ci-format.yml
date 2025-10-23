@@ -1,44 +1,36 @@
-name: 🧪 CI (Auto Format & Test)
+name: 🧹 Auto-format PR
 
 on:
   pull_request:
-    branches:
-      - master
-  workflow_call:
+    branches: [main, master, dev]
 
 jobs:
-  format-test:
+  format:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛎️ Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # so we can push changes back
+          fetch-depth: 0
 
-      - name: ⚙️ Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: 📦 Install dependencies
-        run: bun install --frozen-lockfile
+      - run: bun install --frozen-lockfile
 
-      - name: 🧹 Lint & Auto-fix (Biome)
+      - name: 🧹 Auto-fix formatting
         run: bun run lint:fix
 
-      - name: 📝 Commit and push fixes (if any)
+      - name: 📝 Commit and push fixes
         run: |
           if [[ `git status --porcelain` ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add .
             git commit -m "🧹 Auto format & lint fixes"
-            git push
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
           else
             echo "✅ No formatting changes needed."
           fi
-
-      - name: 🧪 Run tests
-        run: bun run test

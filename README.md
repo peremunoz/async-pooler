@@ -64,6 +64,56 @@ Progress: 2/10
 [ 'Task 0 done', 'Task 1 done', ... ]
 ```
 
+## 🔁 Retrying Tasks with RetryableTask
+When you need individual tasks that automatically retry upon failure,
+use the RetryableTask class — it encapsulates its own retry logic.
+
+```ts
+import {
+  AsyncPool,
+  RetryableTask,
+  ExponentialBackoffStrategy
+} from 'async-pooler'
+
+// Create a pool (global retry strategy optional)
+const pool = new AsyncPool(2, {
+  onProgress: (done, total) => console.log(`Progress: ${done}/${total}`),
+})
+
+// Add retryable tasks
+for (let i = 0; i < 5; i++) {
+  pool.add(
+    new RetryableTask(
+      `retry-${i}`,
+      async () => {
+        if (Math.random() < 0.7) throw new Error('Flaky task')
+        return `✅ Task ${i} succeeded`
+      },
+      // Custom retry strategy (3 retries, exponential backoff starting at 50ms)
+      new ExponentialBackoffStrategy(3, 50)
+    )
+  )
+}
+
+const results = await pool.runAll()
+console.log(results)
+
+```
+🧠 In this example:
+
+- Each RetryableTask retries independently, using its own strategy.
+
+- The AsyncPool doesn’t interfere — it simply runs the tasks concurrently.
+
+### Example output:
+
+```
+Progress: 1/5
+Progress: 2/5
+...
+[ '✅ Task 0 succeeded', '✅ Task 1 succeeded', ... ]
+```
+
 ## 🧪 Testing
 
 ```bash
