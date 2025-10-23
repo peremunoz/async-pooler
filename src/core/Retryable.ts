@@ -21,5 +21,8 @@ export interface Retryable {
  * @returns True if the object is Retryable, false otherwise.
  */
 export function isRetryable(obj: unknown): obj is Retryable {
-	return typeof (obj as { hasOwnRetryStrategy?: unknown }).hasOwnRetryStrategy === "function";
+	return (
+		typeof (obj as { hasOwnRetryStrategy?: unknown }).hasOwnRetryStrategy ===
+		"function"
+	);
 }
