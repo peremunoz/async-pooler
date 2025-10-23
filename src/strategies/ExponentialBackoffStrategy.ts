@@ -13,7 +13,7 @@ export class ExponentialBackoffStrategy implements RetryStrategy {
 		private readonly baseDelay: number = 1000,
 	) {}
 
-	shouldRetry(_error: any, attempt: number): boolean {
+	shouldRetry(_error: unknown, attempt: number): boolean {
 		return attempt < this.maxRetries;
 	}
 

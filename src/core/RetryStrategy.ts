@@ -7,7 +7,7 @@ export interface RetryStrategy {
 	 * @param error - The thrown error.
 	 * @param attempt - The current attempt number (0-based).
 	 */
-	shouldRetry(error: any, attempt: number): boolean;
+	shouldRetry(error: unknown, attempt: number): boolean;
 
 	/**
 	 * The delay (in milliseconds) before the next retry.
