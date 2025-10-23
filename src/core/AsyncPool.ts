@@ -1,3 +1,4 @@
+import { isRetryable } from "./Retryable";
 import type { RetryStrategy } from "./RetryStrategy";
 import type { Task } from "./Task";
 
@@ -40,8 +41,8 @@ export class AsyncPool {
 	 * @param options - Optional configuration options for retries and progress
 	 */
 	constructor(
-		private concurrency: number = 0,
-		private options?: PoolOptions,
+		private readonly concurrency: number = 0,
+		private readonly options?: PoolOptions,
 	) {}
 
 	/**
@@ -78,42 +79,69 @@ export class AsyncPool {
 	}
 
 	/**
-	 * Internal task runner with retry logic.
+	 * Internal task runner that manages active count and progress.
 	 *
 	 * @internal
 	 */
-	private async runTask<T>(task: Task<T>) {
+	private async runTask<T>(task: Task<T>): Promise<void> {
 		this.active++;
-		let attempt = 0;
 
-		const retry = async (): Promise<T> => {
+		const globalStrategy = this.options?.retryStrategy;
+
+		// If the task has its own retry mechanism, just run it
+		if (isRetryable(task)) {
+			await this.execute(task);
+		} else {
+			// Otherwise, apply the global pool strategy
+			await this.runWithGlobalRetry(task, globalStrategy);
+		}
+
+		this.active--;
+		this.completed++;
+		this.options?.onProgress?.(
+			this.completed,
+			this.completed + this.queue.length,
+		);
+	}
+
+	/**
+	 * Executes a task without any retry logic.
+	 *
+	 * @internal
+	 */
+	private async execute<T>(task: Task<T>): Promise<void> {
+		try {
+			const result = await task.run();
+			this.results.push(result);
+		} catch (err) {
+			this.results.push(err);
+		}
+	}
+
+	/**
+	 * Executes a task with the provided global retry strategy.
+	 *
+	 * @internal
+	 */
+	private async runWithGlobalRetry<T>(
+		task: Task<T>,
+		retryStrategy?: RetryStrategy,
+	): Promise<void> {
+		let attempt = 0;
+		const exec = async (): Promise<void> => {
 			try {
 				const result = await task.run();
 				this.results.push(result);
-				return result;
 			} catch (err) {
-				const retryStrategy = this.options?.retryStrategy;
 				if (retryStrategy?.shouldRetry(err, attempt)) {
 					const delay = retryStrategy.getDelay(attempt);
 					attempt++;
 					await new Promise((r) => setTimeout(r, delay));
-					return retry();
-				} else {
-					this.results.push(err);
-					throw err;
+					return exec();
 				}
+				this.results.push(err);
 			}
 		};
-
-		try {
-			await retry();
-		} finally {
-			this.active--;
-			this.completed++;
-			this.options?.onProgress?.(
-				this.completed,
-				this.completed + this.queue.length,
-			);
-		}
+		await exec();
 	}
 }
