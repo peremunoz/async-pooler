@@ -153,6 +153,74 @@ console.log(results)
 [ '⚡ Fast done', Error: Task "slow" timed out after 1000ms ]
 ```
 
+### 🔁 + ⏱️ Combining Retry and Timeout
+You can also combine both behaviors with RetryableTimedTask:
+
+```ts
+import {
+  AsyncPool,
+  RetryableTimedTask,
+  ExponentialBackoffStrategy
+} from 'async-pooler'
+
+const pool = new AsyncPool(2)
+
+pool.add(
+  new RetryableTimedTask(
+    'hybrid-task',
+    async () => {
+      if (Math.random() < 0.8) throw new Error('Still unstable')
+      return '🎯 Success after retries'
+    },
+    1000, // timeout
+    new ExponentialBackoffStrategy(4, 100) // retry config
+  )
+)
+
+const results = await pool.runAll()
+console.log(results)
+```
+### Example output:
+
+```
+[ '🎯 Success after retries' ]
+```
+
+## 🧠 Example: Mixed Task Types in a Single Pool
+You can mix different kinds of tasks seamlessly — the pool handles them polymorphically.
+
+```ts
+import {
+  AsyncPool,
+  Task,
+  RetryableTask,
+  TimedTask,
+  RetryableTimedTask,
+  ExponentialBackoffStrategy,
+} from 'async-pooler'
+
+const pool = new AsyncPool(3, {
+  retryStrategy: new ExponentialBackoffStrategy(2, 50),
+  onProgress: (done, total) => console.log(`Progress: ${done}/${total}`),
+})
+
+pool.add(new Task('plain', async () => 'Plain done'))
+pool.add(new RetryableTask('retryable', async () => 'Retry ok'))
+pool.add(new TimedTask('fast', async () => 'Fast done', 500))
+pool.add(new RetryableTimedTask('hybrid', async () => 'Hybrid ok', 1000))
+
+const results = await pool.runAll()
+console.log(results)
+```
+### Example output:
+
+```
+Progress: 1/4
+Progress: 2/4
+...
+[ 'Plain done', 'Retry ok', 'Fast done', 'Hybrid ok' ]
+```
+
 ## 🧪 Testing
 
 ```bash

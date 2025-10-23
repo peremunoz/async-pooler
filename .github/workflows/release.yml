@@ -52,36 +52,14 @@ jobs:
           fi
 
       - name: 🧾 Generate changelog
+        id: changelog
         if: steps.check.outputs.skip == 'false'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
-          git add CHANGELOG.md
-          git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
+          bunx conventional-changelog -p conventionalcommits --release-count 1 > RELEASE_NOTES.md
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: 📤 Create PR for changelog update
-        if: steps.check.outputs.skip == 'false'
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: changelog/v${{ steps.package.outputs.version }}
-          title: "📝 Update CHANGELOG for v${{ steps.package.outputs.version }}"
-          body: "This PR updates the changelog for the latest release."
-          commit-message: "📝 update CHANGELOG for v${{ steps.package.outputs.version }}"
-          labels: "release, changelog"
-          delete-branch: true
-          assignees: "peremunoz"
-
-      - name: 🤖 Enable auto-merge for changelog PR
-        if: steps.cpr.outputs.pull-request-number != ''
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
-          
       - name: 🏷️ Create Git tag
         if: steps.check.outputs.skip == 'false'
         run: |
@@ -108,4 +86,4 @@ jobs:
         with:
           tag_name: v${{ steps.package.outputs.version }}
           name: "v${{ steps.package.outputs.version }}"
-          body_path: CHANGELOG.md
+          body: ${{ steps.changelog.outputs.changelog }}
