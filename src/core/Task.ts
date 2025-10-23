@@ -5,12 +5,13 @@
  */
 export class Task<T> {
 	/**
+	 * Creates a new Task.
 	 * @param id - Unique identifier for the task.
-	 * @param fn - The function to be executed for the task.
+	 * @param executor - The function to be executed for the task.
 	 */
 	constructor(
 		public readonly id: string,
-		public readonly fn: () => Promise<T>,
+		public readonly executor: () => Promise<T>,
 	) {}
 
 	/**
@@ -19,6 +20,6 @@ export class Task<T> {
 	 * @returns The result of the task execution.
 	 */
 	async run(): Promise<T> {
-		return this.fn();
+		return this.executor();
 	}
 }
