@@ -7,8 +7,7 @@
 	"scripts": {
 		"dev": "bun run test --watch",
 		"test": "vitest run",
-		"lint": "biome check .",
-		"lint:fix": "biome check --apply .",
+		"lint": "bunx biome check --write",
 		"build": "bun build ./src/index.ts --outdir dist --target node",
 		"docs": "typedoc --out docs src --excludePrivate --excludeProtected --includeVersion"
 	},

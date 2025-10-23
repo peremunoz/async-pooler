@@ -18,6 +18,6 @@ export class ExponentialBackoffStrategy implements RetryStrategy {
 	}
 
 	getDelay(attempt: number): number {
-		return this.baseDelay * Math.pow(2, attempt - 1);
+		return this.baseDelay * 2 ** (attempt - 1);
 	}
 }
