@@ -64,9 +64,9 @@ Progress: 2/10
 [ 'Task 0 done', 'Task 1 done', ... ]
 ```
 
-## 🔁 Retrying Tasks with RetryableTask
+## 🔁 Retrying Tasks with `RetryableTask`
 When you need individual tasks that automatically retry upon failure,
-use the RetryableTask class — it encapsulates its own retry logic.
+use the `RetryableTask` class — it encapsulates its own retry logic.
 
 ```ts
 import {
@@ -101,9 +101,9 @@ console.log(results)
 ```
 🧠 In this example:
 
-- Each RetryableTask retries independently, using its own strategy.
+- Each `RetryableTask` retries independently, using its own strategy.
 
-- The AsyncPool doesn’t interfere — it simply runs the tasks concurrently.
+- The `AsyncPool` doesn’t interfere — it simply runs the tasks concurrently.
 
 ### Example output:
 
@@ -115,7 +115,7 @@ Progress: 2/5
 ```
 
 ## ⏱️ Using Timeouts with `TimedTask`
-Sometimes tasks might hang — use TimedTask to automatically fail after a delay.
+Sometimes tasks might hang — use `TimedTask` to automatically fail after a delay.
 
 ```ts
 import { AsyncPool, TimedTask } from 'async-pooler'
@@ -153,8 +153,8 @@ console.log(results)
 [ '⚡ Fast done', Error: Task "slow" timed out after 1000ms ]
 ```
 
-### 🔁 + ⏱️ Combining Retry and Timeout
-You can also combine both behaviors with RetryableTimedTask:
+## 🔁 + ⏱️ Combining Retry and Timeout
+You can also combine both behaviors with `RetryableTimedTask`:
 
 ```ts
 import {
@@ -238,7 +238,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 👤 Author
 
-Developed and maintained by [Pere Muñoz](https://your-website.com).
+Developed and maintained by [Pere Muñoz](https://www.linkedin.com/in/peremunoz/).
 
 ## 🤝 Contributing
 
@@ -247,7 +247,7 @@ Feel free to fork the repository and submit your improvements.
 
 ## 📬 Contact
 
-For any inquiries, please contact [your-email@example.com](mailto:your-email@example.com).
+For any inquiries, please open an issue.
 
 Built for developers who need control and elegance when running async workloads.
 Simple enough for scripts, powerful enough for servers.
