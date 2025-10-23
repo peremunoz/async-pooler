@@ -51,7 +51,7 @@ jobs:
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: 🧾 Generate changelog (new commits only)
+      - name: 🧾 Generate changelog
         if: steps.check.outputs.skip == 'false'
         run: |
           git config user.name "github-actions[bot]"
@@ -61,6 +61,8 @@ jobs:
           git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
 
       - name: 📤 Create PR for changelog update
+        if: steps.check.outputs.skip == 'false'
+        id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
