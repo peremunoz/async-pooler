@@ -1,3 +1,9 @@
+## [1.2.3](https://github.com/peremunoz/async-pooler/compare/v1.2.2...v1.2.3) (2025-10-23)
+
+### Bug Fixes
+
+* bump version to 1.2.3 in package.json ([02a0211](https://github.com/peremunoz/async-pooler/commit/02a0211ba2a53fd4562de6b03bf2656fe6000360))
+* update branch filters in CI workflow and refine changelog generation step ([e6d2f64](https://github.com/peremunoz/async-pooler/commit/e6d2f64f9f3b0a119aab9d16947843a262c26710))
 ## [1.2.2](https://github.com/peremunoz/async-pooler/compare/v1.2.1...v1.2.2) (2025-10-23)
 
 ### Features
