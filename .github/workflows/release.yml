@@ -1,9 +1,9 @@
-name: 🚀 Publish to npm
+name: 🚀 Release & Publish
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - master
 
 jobs:
   verify:
@@ -34,9 +34,52 @@ jobs:
       - name: 🏗️ Build project
         run: bun run build
 
+      - name: 🧾 Get version from package.json
+        id: package
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: 🛑 Skip if version already published
+        id: check
+        run: |
+          VERSION=${{ steps.package.outputs.version }}
+          if npm view async-pooler@$VERSION > /dev/null 2>&1; then
+            echo "⚠️ Version $VERSION already published on npm. Skipping publish."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🏷️ Create Git tag
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          VERSION=${{ steps.package.outputs.version }}
+          TAG="v${VERSION}"
+          echo "🏷️ Tagging release as $TAG"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
       - name: 🚀 Publish to npm
+        if: steps.check.outputs.skip == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           npm publish --access public
+
+      - name: 🧰 Create GitHub Release
+        if: steps.check.outputs.skip == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.package.outputs.version }}
+          name: "v${{ steps.package.outputs.version }}"
+          body: |
+            🚀 **async-pooler v${{ steps.package.outputs.version }}** is now live!
+
+            ### Highlights
+            - Automatically published via CI
+            - Linted, tested and built with Bun
+
+            ---
+            [View on npm](https://www.npmjs.com/package/async-pooler)
