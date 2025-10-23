@@ -71,7 +71,7 @@ jobs:
           delete-branch: true
           assignees: "peremunoz"
 
-       - name: 🤖 Enable auto-merge for changelog PR
+      - name: 🤖 Enable auto-merge for changelog PR
         if: steps.cpr.outputs.pull-request-number != ''
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
