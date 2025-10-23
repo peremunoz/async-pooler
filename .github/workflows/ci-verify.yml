@@ -2,7 +2,7 @@ name: 🧪 Verify Build
 
 on:
   push:
-    branches: [main, master, dev]
+    branches: [main, master, dev, changelog/**]
   workflow_call:
 
 jobs:

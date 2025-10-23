@@ -58,15 +58,26 @@ jobs:
           bunx conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
           git add CHANGELOG.md
           git commit -m "📝 update CHANGELOG for v${{ steps.package.outputs.version }}" || echo "No changelog changes"
-          
+
       - name: 📤 Create PR for changelog update
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: changelog/v${{ steps.package.outputs.version }}
           title: "📝 Update CHANGELOG for v${{ steps.package.outputs.version }}"
-          body: "This PR updates the changelog after the v${{ steps.package.outputs.version }} release."
+          body: "This PR updates the changelog for the latest release."
           commit-message: "📝 update CHANGELOG for v${{ steps.package.outputs.version }}"
+          labels: "release, changelog"
+          delete-branch: true
+          assignees: "peremunoz"
+
+       - name: 🤖 Enable auto-merge for changelog PR
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
           
       - name: 🏷️ Create Git tag
         if: steps.check.outputs.skip == 'false'
