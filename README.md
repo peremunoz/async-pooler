@@ -6,6 +6,7 @@
 [![bun compatible](https://img.shields.io/badge/runs%20with-bun-fd0.svg)](https://bun.sh)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O41NA0Y7)
 ---
 
 ### ✨ Features
