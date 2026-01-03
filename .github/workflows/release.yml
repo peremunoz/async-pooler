@@ -73,10 +73,11 @@ jobs:
 
       - name: 🚀 Publish to npm
         if: steps.check.outputs.skip == 'false'
-        run: |
-          echo "//registry.npmjs.org/" > ~/.npmrc
-          npm publish --access public
-      
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm publish
 
       - name: 🧰 Create GitHub Release
         if: steps.check.outputs.skip == 'false'
