@@ -4,6 +4,10 @@
 	"description": "Lightweight and typed async pool manager with concurrency control and retry strategies.",
 	"module": "src/index.ts",
 	"type": "module",
+	"repository": {
+		"url": "https://github.com/peremunoz/async-pooler",
+		"type": "github"
+	},
 	"scripts": {
 		"dev": "bun run test --watch",
 		"test": "vitest run",
