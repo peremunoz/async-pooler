@@ -73,12 +73,11 @@ jobs:
 
       - name: 🚀 Publish to npm
         if: steps.check.outputs.skip == 'false'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          npm publish --access public
-      
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm publish
 
       - name: 🧰 Create GitHub Release
         if: steps.check.outputs.skip == 'false'
